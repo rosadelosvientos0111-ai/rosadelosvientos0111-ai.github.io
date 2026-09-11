@@ -79,7 +79,6 @@ inputArchivoImagen?.addEventListener("change", async () => {
       "❌ No se pudo cargar la imagen";
   }
 });
-});
 
 const q = query(collection(db, "productos"), orderBy("nombre"));
 
@@ -191,10 +190,19 @@ form?.addEventListener("submit", async (e) => {
       await addDoc(collection(db, "productos"), {
         ...datos,
         disponible: true
-});
+      });
       mensajeEstado.textContent = "Producto agregado ✓";
     }
-    resetForm();
+
+    form.reset();
+    inputArchivoImagen.value = "";
+    mensajeImagen.textContent = "";
+    vistaPreviaImagen.style.display = "none";
+    vistaPreviaImagen.src = "";
+    editandoId = null;
+    tituloForm.textContent = "Agregar producto nuevo";
+    btnCancelarEdicion.classList.add("oculto");
+
     setTimeout(() => (mensajeEstado.textContent = ""), 3000);
   } catch (err) {
     mensajeEstado.textContent = "Hubo un error al guardar. Revisá las reglas de Firestore.";
