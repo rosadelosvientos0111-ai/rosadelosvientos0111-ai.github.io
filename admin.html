@@ -60,9 +60,23 @@
           <input type="number" id="input-precio" min="0" step="1" required>
         </div>
         <div class="campo">
-          <label for="input-imagen">URL de la imagen</label>
-          <input type="url" id="input-imagen" placeholder="https://...">
+  <label for="input-imagen">URL de la imagen</label>
+  <input type="url" id="input-imagen" placeholder="https://...">
 
+  <div style="margin-top:10px;">
+    <label for="input-archivo-imagen" class="boton boton-secundario">
+      📷 Elegir imagen
+    </label>
+    <input
+      type="file"
+      id="input-archivo-imagen"
+      accept="image/*"
+      style="display:none;"
+    >
+  </div>
+
+  <small id="mensaje-imagen"></small>
+</div>
           <label for="input-archivo-imagen" class="boton boton-secundario">
             📷 Elegir imagen
           </label>
