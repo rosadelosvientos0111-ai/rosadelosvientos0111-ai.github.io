@@ -94,7 +94,11 @@ getDocsFromServer(q)
     );
   })
   .catch((error) => {
-    console.error("🔴 ERROR LECTURA DIRECTA DEL SERVIDOR:", error);
+    console.error("🔴 ERROR LECTURA DIRECTA DEL SERVIDOR");
+    console.error("📌 CÓDIGO:", error.code);
+    console.error("📌 NOMBRE:", error.name);
+    console.error("📌 MENSAJE:", error.message);
+    console.error("📌 ERROR COMPLETO:", error);
   });
 
 onSnapshot(
