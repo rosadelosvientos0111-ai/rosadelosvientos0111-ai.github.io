@@ -55,7 +55,22 @@ function render() {
       <h3>${p.nombre}</h3>
       <p class="categoria-chip">${p.categoria}${p.subcategoria ? " · " + p.subcategoria : ""}</p>
       <p class="precio">$${Number(p.precio).toLocaleString("es-AR")}</p>
-      <button class="boton-agregar" data-id="${p.id}">Agregar al pedido</button>
+
+${
+  p.disponible !== false
+    ? `
+      <p class="estado-stock disponible">🟢 En stock</p>
+      <button class="boton-agregar" data-id="${p.id}">
+        Agregar al pedido
+      </button>
+    `
+    : `
+      <p class="estado-stock sin-stock">🟠 Sin stock</p>
+      <button class="boton-agregar" disabled>
+        Sin stock
+      </button>
+    `
+}
     </article>
   `
     )
