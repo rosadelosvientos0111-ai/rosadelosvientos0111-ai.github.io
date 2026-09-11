@@ -7,10 +7,10 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  onSnapshot,
-  getDocsFromServer,
-  query,
-  orderBy
+onSnapshot,
+getDocsFromServer,
+query,
+orderBy
 } from "./firebase-init.js";
 import { ADMIN_EMAIL } from "./firebase-config.js";
 
@@ -81,6 +81,7 @@ inputArchivoImagen?.addEventListener("change", async () => {
   }
 });
 const q = query(collection(db, "productos"), orderBy("nombre"));
+
 getDocsFromServer(q)
   .then((snapshot) => {
     console.log("🧪 LECTURA DIRECTA DEL SERVIDOR:", snapshot.docs.length);
@@ -95,6 +96,7 @@ getDocsFromServer(q)
   .catch((error) => {
     console.error("🔴 ERROR LECTURA DIRECTA DEL SERVIDOR:", error);
   });
+
 onSnapshot(
   q,
   { includeMetadataChanges: true },
