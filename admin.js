@@ -79,6 +79,10 @@ inputArchivoImagen?.addEventListener("change", async () => {
       "❌ No se pudo cargar la imagen";
   }
 });
+});
+
+const q = query(collection(db, "productos"), orderBy("nombre"));
+
 onSnapshot(q, (snapshot) => {
   const productos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
   tabla.innerHTML = productos
