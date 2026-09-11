@@ -82,9 +82,19 @@ inputArchivoImagen?.addEventListener("change", async () => {
 
 const q = query(collection(db, "productos"), orderBy("nombre"));
 
-onSnapshot(q, (snapshot) => {
-  const productos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-  tabla.innerHTML = productos
+onSnapshot(
+  q,
+  (snapshot) => {
+    console.log("🟢 PRODUCTOS LEÍDOS DE FIRESTORE:", snapshot.docs.length);
+
+    const productos = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data()
+    }));
+
+    console.log("📦 PRODUCTOS:", productos);
+
+    tabla.innerHTML = productos
     .map(
       (p) => `
     <tr>
@@ -121,7 +131,12 @@ onSnapshot(q, (snapshot) => {
       if (btn.dataset.accion === "borrar") borrarProducto(producto.id);
     });
   });
-});
+
+  },
+  (error) => {
+    console.error("🔴 ERROR AL LEER PRODUCTOS:", error);
+  }
+);
 async function guardarEstadoProducto(id) {
   const selector = document.querySelector(
     `.selector-stock[data-id="${id}"]`
