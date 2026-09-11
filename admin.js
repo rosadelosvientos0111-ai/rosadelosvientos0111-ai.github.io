@@ -79,13 +79,15 @@ inputArchivoImagen?.addEventListener("change", async () => {
       "❌ No se pudo cargar la imagen";
   }
 });
-
 const q = query(collection(db, "productos"), orderBy("nombre"));
 
 onSnapshot(
   q,
+  { includeMetadataChanges: true },
   (snapshot) => {
-    console.log("🟢 PRODUCTOS LEÍDOS DE FIRESTORE:", snapshot.docs.length);
+    console.log("🟢 PRODUCTOS LEÍDOS:", snapshot.docs.length);
+    console.log("🌐 ¿VIENE DE CACHÉ?:", snapshot.metadata.fromCache);
+    console.log("⏳ ¿HAY CAMBIOS PENDIENTES?:", snapshot.metadata.hasPendingWrites);
 
     const productos = snapshot.docs.map((d) => ({
       id: d.id,
