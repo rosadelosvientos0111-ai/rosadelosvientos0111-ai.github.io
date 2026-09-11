@@ -43,10 +43,21 @@ onSnapshot(q, (snapshot) => {
       <td>${p.nombre}</td>
       <td>${p.categoria}${p.subcategoria ? " · " + p.subcategoria : ""}</td>
       <td>$${Number(p.precio).toLocaleString("es-AR")}</td>
+      <td>
+        <select class="selector-stock" data-id="${p.id}">
+          <option value="disponible" ${(p.disponible !== false) ? "selected" : ""}>
+            🟢 En stock
+          </option>
+          <option value="sin-stock" ${p.disponible === false ? "selected" : ""}>
+            🟠 Sin stock
+          </option>
+        </select>
+      </td>
       <td>${p.oferta ? "Sí" : "No"}</td>
       <td class="acciones-tabla">
+        <button data-accion="guardar" data-id="${p.id}">💾 Guardar</button>
         <button data-accion="editar" data-id="${p.id}">Editar</button>
-        <button data-accion="borrar" data-id="${p.id}" class="boton-borrar">Borrar</button>
+        <button data-accion="borrar" data-id="${p.id}" class="boton-borrar">🗑️ Eliminar</button>
       </td>
     </tr>
   `
@@ -56,6 +67,7 @@ onSnapshot(q, (snapshot) => {
   tabla.querySelectorAll("button[data-accion]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const producto = productos.find((p) => p.id === btn.dataset.id);
+      if (btn.dataset.accion === "guardar") guardarEstadoProducto(producto.id);
       if (btn.dataset.accion === "editar") cargarParaEditar(producto);
       if (btn.dataset.accion === "borrar") borrarProducto(producto.id);
     });
