@@ -73,7 +73,22 @@ onSnapshot(q, (snapshot) => {
     });
   });
 });
+async function guardarEstadoProducto(id) {
+  const selector = document.querySelector(
+    `.selector-stock[data-id="${id}"]`
+  );
 
+  const disponible = selector.value === "disponible";
+
+  try {
+    await updateDoc(doc(db, "productos", id), {
+      disponible
+    });
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo guardar el estado del producto.");
+  }
+}
 function cargarParaEditar(producto) {
   editandoId = producto.id;
   tituloForm.textContent = `Editando: ${producto.nombre}`;
@@ -120,7 +135,10 @@ form?.addEventListener("submit", async (e) => {
       await updateDoc(doc(db, "productos", editandoId), datos);
       mensajeEstado.textContent = "Producto actualizado ✓";
     } else {
-      await addDoc(collection(db, "productos"), datos);
+      await addDoc(collection(db, "productos"), {
+        ...datos,
+        disponible: true
+});
       mensajeEstado.textContent = "Producto agregado ✓";
     }
     resetForm();
