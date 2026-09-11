@@ -21,6 +21,7 @@ const btnCancelarEdicion = document.getElementById("btn-cancelar-edicion");
 const tituloForm = document.getElementById("titulo-form");
 const inputArchivoImagen = document.getElementById("input-archivo-imagen");
 const mensajeImagen = document.getElementById("mensaje-imagen");
+const vistaPreviaImagen = document.getElementById("vista-previa-imagen");
 
 const CLOUDINARY_CLOUD_NAME = "bdlkfwhf";
 const CLOUDINARY_UPLOAD_PRESET = "Rosa de los vientos";
@@ -42,6 +43,16 @@ inputArchivoImagen?.addEventListener("change", async () => {
 
   if (!archivo) return;
 
+  // Mostrar vista previa inmediatamente
+  const lector = new FileReader();
+
+  lector.onload = (e) => {
+    vistaPreviaImagen.src = e.target.result;
+    vistaPreviaImagen.style.display = "block";
+  };
+
+  lector.readAsDataURL(archivo);
+
   mensajeImagen.textContent = "Subiendo imagen...";
 
   try {
@@ -53,6 +64,24 @@ inputArchivoImagen?.addEventListener("change", async () => {
       method: "POST",
       body: datos
     });
+
+    if (!respuesta.ok) {
+      throw new Error("Error al subir la imagen");
+    }
+
+    const resultado = await respuesta.json();
+
+    document.getElementById("input-imagen").value =
+      resultado.secure_url;
+
+    mensajeImagen.textContent = "✅ Imagen cargada";
+
+  } catch (error) {
+    console.error(error);
+    mensajeImagen.textContent =
+      "❌ No se pudo cargar la imagen";
+  }
+});
 
     if (!respuesta.ok) {
       throw new Error("Error al subir la imagen");
@@ -150,6 +179,8 @@ function resetForm() {
   form.reset();
   inputArchivoImagen.value = "";
   mensajeImagen.textContent = "";
+  vistaPreviaImagen.style.display = "none";
+  vistaPreviaImagen.src = "";
   tituloForm.textContent = "Agregar producto nuevo";
   btnCancelarEdicion.classList.add("oculto");
 }
