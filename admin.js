@@ -19,7 +19,13 @@ const form = document.getElementById("form-producto");
 const tabla = document.getElementById("tabla-productos-body");
 const btnCancelarEdicion = document.getElementById("btn-cancelar-edicion");
 const tituloForm = document.getElementById("titulo-form");
+const inputArchivoImagen = document.getElementById("input-archivo-imagen");
+const mensajeImagen = document.getElementById("mensaje-imagen");
 
+const CLOUDINARY_CLOUD_NAME = "bdlkfwhf";
+const CLOUDINARY_UPLOAD_PRESET = "Rosa de los vientos";
+const CLOUDINARY_UPLOAD_URL =
+  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 let editandoId = null;
 
 onAuthStateChanged(auth, (user) => {
@@ -31,7 +37,40 @@ onAuthStateChanged(auth, (user) => {
     bloqueAdmin.classList.add("oculto");
   }
 });
+inputArchivoImagen?.addEventListener("change", async () => {
+  const archivo = inputArchivoImagen.files[0];
 
+  if (!archivo) return;
+
+  mensajeImagen.textContent = "Subiendo imagen...";
+
+  try {
+    const datos = new FormData();
+    datos.append("file", archivo);
+    datos.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const respuesta = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: "POST",
+      body: datos
+    });
+
+    if (!respuesta.ok) {
+      throw new Error("Error al subir la imagen");
+    }
+
+    const resultado = await respuesta.json();
+
+    document.getElementById("input-imagen").value =
+      resultado.secure_url;
+
+    mensajeImagen.textContent = "✅ Imagen cargada";
+
+  } catch (error) {
+    console.error(error);
+    mensajeImagen.textContent =
+      "❌ No se pudo cargar la imagen";
+  }
+});
 const q = query(collection(db, "productos"), orderBy("nombre"));
 onSnapshot(q, (snapshot) => {
   const productos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
