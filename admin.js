@@ -39,11 +39,19 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 inputArchivoImagen?.addEventListener("change", async () => {
-  const archivo = inputArchivoImagen.files[0];
+    const archivo = inputArchivoImagen.files[0];
 
-  if (!archivo) return;
+    if (!archivo) return;
+  const lector = new FileReader();
 
-  // Mostrar vista previa inmediatamente
+  lector.onload = (e) => {
+    vistaPreviaImagen.src = e.target.result;
+    vistaPreviaImagen.style.display = "block";
+  };
+
+  lector.readAsDataURL(archivo);
+  mensajeImagen.textContent = "Subiendo imagen...";
+  
   const lector = new FileReader();
 
   lector.onload = (e) => {
@@ -73,8 +81,6 @@ inputArchivoImagen?.addEventListener("change", async () => {
 
     document.getElementById("input-imagen").value =
       resultado.secure_url;
-
-    mensajeImagen.textContent = "✅ Imagen cargada";
 
   } catch (error) {
     console.error(error);
