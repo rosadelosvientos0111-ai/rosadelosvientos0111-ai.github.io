@@ -17,6 +17,8 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  getDocs,
+  getDocsFromServer,
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -41,6 +43,8 @@ export {
   deleteDoc,
   doc,
   onSnapshot,
+  getDocs,
+  getDocsFromServer,
   query,
   orderBy
 };
