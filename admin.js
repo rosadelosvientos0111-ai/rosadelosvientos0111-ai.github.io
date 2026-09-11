@@ -148,6 +148,8 @@ btnCancelarEdicion?.addEventListener("click", () => {
 function resetForm() {
   editandoId = null;
   form.reset();
+  inputArchivoImagen.value = "";
+  mensajeImagen.textContent = "";
   tituloForm.textContent = "Agregar producto nuevo";
   btnCancelarEdicion.classList.add("oculto");
 }
