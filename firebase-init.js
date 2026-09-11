@@ -10,7 +10,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import {
-  getFirestore,
+  initializeFirestore,
   collection,
   addDoc,
   updateDoc,
@@ -26,7 +26,9 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true
+});
 
 export {
   createUserWithEmailAndPassword,
