@@ -39,19 +39,10 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 inputArchivoImagen?.addEventListener("change", async () => {
-    const archivo = inputArchivoImagen.files[0];
+  const archivo = inputArchivoImagen.files[0];
 
-    if (!archivo) return;
-  const lector = new FileReader();
+  if (!archivo) return;
 
-  lector.onload = (e) => {
-    vistaPreviaImagen.src = e.target.result;
-    vistaPreviaImagen.style.display = "block";
-  };
-
-  lector.readAsDataURL(archivo);
-  mensajeImagen.textContent = "Subiendo imagen...";
-  
   const lector = new FileReader();
 
   lector.onload = (e) => {
@@ -88,25 +79,6 @@ inputArchivoImagen?.addEventListener("change", async () => {
       "❌ No se pudo cargar la imagen";
   }
 });
-
-    if (!respuesta.ok) {
-      throw new Error("Error al subir la imagen");
-    }
-
-    const resultado = await respuesta.json();
-
-    document.getElementById("input-imagen").value =
-      resultado.secure_url;
-
-    mensajeImagen.textContent = "✅ Imagen cargada";
-
-  } catch (error) {
-    console.error(error);
-    mensajeImagen.textContent =
-      "❌ No se pudo cargar la imagen";
-  }
-});
-const q = query(collection(db, "productos"), orderBy("nombre"));
 onSnapshot(q, (snapshot) => {
   const productos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
   tabla.innerHTML = productos
