@@ -30,6 +30,9 @@ const CLOUDINARY_UPLOAD_URL =
   `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 let editandoId = null;
 
+const btnGuardarProducto = form.querySelector('button[type="submit"]');
+let subiendoImagen = false;
+
 onAuthStateChanged(auth, (user) => {
   if (user && user.email === ADMIN_EMAIL) {
     bloqueAcceso.classList.add("oculto");
@@ -39,6 +42,7 @@ onAuthStateChanged(auth, (user) => {
     bloqueAdmin.classList.add("oculto");
   }
 });
+
 inputArchivoImagen?.addEventListener("change", async () => {
   const archivo = inputArchivoImagen.files[0];
 
@@ -53,7 +57,10 @@ inputArchivoImagen?.addEventListener("change", async () => {
 
   lector.readAsDataURL(archivo);
 
+  subiendoImagen = true;
+  if (btnGuardarProducto) btnGuardarProducto.disabled = true;
   mensajeImagen.textContent = "Subiendo imagen...";
+  mensajeImagen.classList.remove("mensaje-imagen-error");
 
   try {
     const datos = new FormData();
@@ -71,15 +78,19 @@ inputArchivoImagen?.addEventListener("change", async () => {
 
     const resultado = await respuesta.json();
 
-    document.getElementById("input-imagen").value =
-      resultado.secure_url;
+    document.getElementById("input-imagen").value = resultado.secure_url;
+    mensajeImagen.textContent = "✅ Imagen subida correctamente";
 
   } catch (error) {
     console.error(error);
-    mensajeImagen.textContent =
-      "❌ No se pudo cargar la imagen";
+    mensajeImagen.textContent = "❌ No se pudo cargar la imagen. Probá de nuevo antes de guardar.";
+    mensajeImagen.classList.add("mensaje-imagen-error");
+  } finally {
+    subiendoImagen = false;
+    if (btnGuardarProducto) btnGuardarProducto.disabled = false;
   }
 });
+
 const q = query(collection(db, "productos"), orderBy("nombre"));
 
 getDocsFromServer(q)
@@ -159,6 +170,7 @@ onSnapshot(
     console.error("🔴 ERROR AL LEER PRODUCTOS:", error);
   }
 );
+
 async function guardarEstadoProducto(id) {
   const selector = document.querySelector(
     `.selector-stock[data-id="${id}"]`
@@ -175,6 +187,7 @@ async function guardarEstadoProducto(id) {
     alert("No se pudo guardar el estado del producto.");
   }
 }
+
 function cargarParaEditar(producto) {
   editandoId = producto.id;
   tituloForm.textContent = `Editando: ${producto.nombre}`;
@@ -202,6 +215,7 @@ function resetForm() {
   tituloForm.textContent = "Agregar producto nuevo";
   btnCancelarEdicion.classList.add("oculto");
 }
+
 async function borrarProducto(id) {
   if (!confirm("¿Seguro que querés borrar este producto? No se puede deshacer.")) return;
   await deleteDoc(doc(db, "productos", id));
@@ -210,6 +224,11 @@ async function borrarProducto(id) {
 form?.addEventListener("submit", async (e) => {
   console.log("🔥 SE EJECUTÓ EL SUBMIT");
   e.preventDefault();
+
+  if (subiendoImagen) {
+    alert("Esperá a que termine de subirse la imagen antes de guardar.");
+    return;
+  }
 
   const datos = {
     nombre: document.getElementById("input-nombre").value.trim(),
