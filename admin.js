@@ -8,6 +8,7 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  getDocsFromServer,
   query,
   orderBy
 } from "./firebase-init.js";
@@ -80,7 +81,20 @@ inputArchivoImagen?.addEventListener("change", async () => {
   }
 });
 const q = query(collection(db, "productos"), orderBy("nombre"));
-
+getDocsFromServer(q)
+  .then((snapshot) => {
+    console.log("🧪 LECTURA DIRECTA DEL SERVIDOR:", snapshot.docs.length);
+    console.log(
+      "🧪 DATOS DEL SERVIDOR:",
+      snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data()
+      }))
+    );
+  })
+  .catch((error) => {
+    console.error("🔴 ERROR LECTURA DIRECTA DEL SERVIDOR:", error);
+  });
 onSnapshot(
   q,
   { includeMetadataChanges: true },
