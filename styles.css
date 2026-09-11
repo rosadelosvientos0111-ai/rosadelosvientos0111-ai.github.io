@@ -793,3 +793,10 @@ button {
     width: 100%;
   }
 }
+
+.mensaje-imagen-error {
+  color: var(--coral-flor);
+  font-weight: 700;
+  display: block;
+  margin-top: 6px;
+}
