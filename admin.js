@@ -171,7 +171,9 @@ async function borrarProducto(id) {
 }
 
 form?.addEventListener("submit", async (e) => {
+  console.log("🔥 SE EJECUTÓ EL SUBMIT");
   e.preventDefault();
+
   const datos = {
     nombre: document.getElementById("input-nombre").value.trim(),
     categoria: document.getElementById("input-categoria").value,
