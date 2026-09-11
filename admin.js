@@ -183,16 +183,22 @@ form?.addEventListener("submit", async (e) => {
 
   const mensajeEstado = document.getElementById("mensaje-estado-form");
   try {
-    if (editandoId) {
-      await updateDoc(doc(db, "productos", editandoId), datos);
-      mensajeEstado.textContent = "Producto actualizado ✓";
-    } else {
-      await addDoc(collection(db, "productos"), {
-        ...datos,
-        disponible: true
-      });
-      mensajeEstado.textContent = "Producto agregado ✓";
-    }
+   if (editandoId) {
+     await updateDoc(doc(db, "productos", editandoId), datos);
+     console.log("✅ Producto actualizado:", editandoId);
+     mensajeEstado.textContent = "Producto actualizado ✓";
+   } else {
+     const docRef = await addDoc(collection(db, "productos"), {
+       ...datos,
+       disponible: true
+     });
+
+     console.log("✅ PRODUCTO GUARDADO EN FIRESTORE");
+     console.log("🆔 ID del producto:", docRef.id);
+     console.log("📦 Datos:", datos);
+
+  mensajeEstado.textContent = "Producto agregado ✓";
+}
 
     form.reset();
     inputArchivoImagen.value = "";
