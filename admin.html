@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Admin — Rosa de los Vientos</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="encabezado">
+  <div class="marca">
+    <span class="marca-icono">🌿</span>
+    <span class="logo-texto">Panel de <span>Admin</span></span>
+  </div>
+  <div class="nav-acciones">
+    <a href="index.html" class="boton boton-secundario">← Volver a la tienda</a>
+  </div>
+</header>
+
+<main class="pagina-admin">
+
+  <div class="bloque-sin-acceso" id="bloque-sin-acceso">
+    <h2>No tenés acceso a esta página</h2>
+    <p>Iniciá sesión con la cuenta de administrador desde la tienda principal.</p>
+  </div>
+
+  <div class="bloque-admin oculto" id="bloque-admin">
+    <form class="form-producto" id="form-producto">
+      <h2 id="titulo-form">Agregar producto nuevo</h2>
+
+      <div class="form-grid">
+        <div class="campo">
+          <label for="input-nombre">Nombre del producto</label>
+          <input type="text" id="input-nombre" required>
+        </div>
+        <div class="campo">
+          <label for="input-categoria">Categoría</label>
+          <select id="input-categoria" required>
+            <option value="Plantas">Plantas</option>
+            <option value="Macetas">Macetas</option>
+            <option value="Impresión 3D">Impresión 3D</option>
+            <option value="Semillas">Semillas</option>
+            <option value="Control de plagas">Control de plagas</option>
+            <option value="Bulbos">Bulbos</option>
+            <option value="Jardinería">Jardinería</option>
+            <option value="Fertilizantes">Fertilizantes</option>
+            <option value="Sustratos">Sustratos</option>
+            <option value="Decoración">Decoración</option>
+            <option value="Regalos">Regalos</option>
+            <option value="Ofertas">Ofertas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="input-subcategoria">Subcategoría (opcional)</label>
+          <input type="text" id="input-subcategoria" placeholder="Ej: Interior, Frutales...">
+        </div>
+        <div class="campo">
+          <label for="input-precio">Precio ($)</label>
+          <input type="number" id="input-precio" min="0" step="1" required>
+        </div>
+        <div class="campo">
+          <label for="input-imagen">URL de la imagen</label>
+          <input type="url" id="input-imagen" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="campo-checkbox">
+        <input type="checkbox" id="input-oferta">
+        <label for="input-oferta">Marcar como oferta</label>
+      </div>
+
+      <div class="form-acciones">
+        <button type="submit" class="boton boton-primario">Guardar producto</button>
+        <button type="button" id="btn-cancelar-edicion" class="boton boton-secundario oculto">Cancelar edición</button>
+        <span class="mensaje-estado-form" id="mensaje-estado-form"></span>
+      </div>
+    </form>
+
+    <h2 style="margin-bottom:16px;">Productos cargados</h2>
+    <table class="tabla-productos">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Oferta</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-productos-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<script type="module" src="js/firebase-init.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

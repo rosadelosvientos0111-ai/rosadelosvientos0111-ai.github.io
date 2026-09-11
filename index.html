@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivero Rosa de los Vientos</title>
+<meta name="description" content="Plantas, macetas e insumos de jardín. Vivero Rosa de los Vientos.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="encabezado">
+  <div class="marca">
+    <span class="marca-icono">🌿</span>
+    <span class="logo-texto">Rosa de los <span>Vientos</span></span>
+  </div>
+  <div class="nav-acciones">
+    <a href="admin.html" id="link-admin" class="link-admin oculto">Panel Admin</a>
+    <button class="boton boton-secundario" id="btn-cuenta">
+      <span id="btn-cuenta-texto">Ingresar</span>
+    </button>
+    <button class="boton-carrito" id="btn-carrito" aria-label="Ver carrito">
+      🛒
+      <span class="contador-carrito oculto" id="contador-carrito">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-blob blob-1"></div>
+  <div class="hero-blob blob-2"></div>
+  <div class="hero-blob blob-3"></div>
+  <div class="hero-contenido">
+    <h1>Cada rincón merece algo verde</h1>
+    <p>Plantas de interior y exterior, macetas, tierra y todo lo que tu jardín necesita — elegido y cuidado a mano.</p>
+    <div class="hero-acciones">
+      <a href="#catalogo" class="boton boton-primario">Ver catálogo</a>
+      <a href="#contacto" class="boton boton-acento">Contactanos</a>
+    </div>
+  </div>
+</section>
+
+<svg class="ola-divisora" viewBox="0 0 1440 80" preserveAspectRatio="none">
+  <path d="M0,32 C240,80 480,0 720,24 C960,48 1200,80 1440,32 L1440,80 L0,80 Z" fill="#FFFFFF"/>
+</svg>
+
+<section class="seccion-catalogo" id="catalogo">
+  <div class="filtros-categoria">
+    <button class="filtro-categoria activo" data-categoria="Todas">Todas</button>
+    <button class="filtro-categoria" data-categoria="Plantas">Plantas</button>
+    <button class="filtro-categoria" data-categoria="Macetas">Macetas</button>
+    <button class="filtro-categoria" data-categoria="Impresión 3D">Impresión 3D</button>
+    <button class="filtro-categoria" data-categoria="Semillas">Semillas</button>
+    <button class="filtro-categoria" data-categoria="Control de plagas">Control de plagas</button>
+    <button class="filtro-categoria" data-categoria="Bulbos">Bulbos</button>
+    <button class="filtro-categoria" data-categoria="Jardinería">Jardinería</button>
+    <button class="filtro-categoria" data-categoria="Fertilizantes">Fertilizantes</button>
+    <button class="filtro-categoria" data-categoria="Sustratos">Sustratos</button>
+    <button class="filtro-categoria" data-categoria="Decoración">Decoración</button>
+    <button class="filtro-categoria" data-categoria="Regalos">Regalos</button>
+    <button class="filtro-categoria" data-categoria="Ofertas">Ofertas</button>
+  </div>
+
+  <div class="grilla-productos" id="grilla-productos"></div>
+  <p class="mensaje-vacio oculto" id="mensaje-vacio">Todavía no hay productos cargados en esta categoría.</p>
+</section>
+
+<section class="seccion-nosotros">
+  <div class="nosotros-contenido">
+    <h2>Sobre nosotros</h2>
+    <p>Somos un vivero familiar dedicado a acompañarte a elegir, cuidar y hacer crecer tus plantas. Atención personalizada, plantas sanas y consejos honestos en cada visita.</p>
+  </div>
+</section>
+
+<section class="seccion-contacto" id="contacto">
+  <h2>¿Tenés dudas o querés visitarnos?</h2>
+  <p>Escribinos por WhatsApp o seguinos en Instagram para ver las novedades de la semana.</p>
+  <div class="contacto-botones">
+    <a href="https://wa.me/5493517894096" target="_blank" class="boton boton-whatsapp" style="width:auto; display:inline-flex; align-items:center; gap:8px;">💬 WhatsApp</a>
+    <a href="https://instagram.com/vivero_rosa_de_los_vientos" target="_blank" class="boton boton-secundario">📷 Instagram</a>
+  </div>
+</section>
+
+<footer class="pie">
+  <p>Vivero Rosa de los Vientos © <span id="anio"></span> · Hecho con cariño para nuestros clientes.</p>
+</footer>
+
+<!-- Carrito -->
+<aside class="panel-carrito" id="panel-carrito">
+  <div class="carrito-header">
+    <h2>Tu pedido</h2>
+    <button id="cerrar-carrito" class="cerrar-x">✕</button>
+  </div>
+  <div class="lista-carrito" id="lista-carrito"></div>
+  <div class="carrito-footer">
+    <div class="carrito-total">
+      <span>Total</span>
+      <span id="total-carrito">$0</span>
+    </div>
+    <button class="boton-whatsapp" id="btn-enviar-pedido">Enviar pedido por WhatsApp</button>
+  </div>
+</aside>
+
+<!-- Modal login/registro -->
+<div class="auth-modal" id="auth-modal">
+  <div class="auth-caja">
+    <button class="cerrar-x" id="cerrar-modal">✕</button>
+
+    <div id="vista-login">
+      <h2>Ingresar</h2>
+      <form id="form-login">
+        <div class="campo">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required>
+        </div>
+        <div class="campo">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" required>
+        </div>
+        <p class="auth-error" id="error-login"></p>
+        <button type="submit" class="boton boton-primario">Ingresar</button>
+      </form>
+      <p class="auth-cambio">¿No tenés cuenta? <a href="#" id="mostrar-registro">Creá una acá</a></p>
+    </div>
+
+    <div id="vista-registro" class="oculto">
+      <h2>Crear cuenta</h2>
+      <form id="form-registro">
+        <div class="campo">
+          <label for="registro-email">Email</label>
+          <input type="email" id="registro-email" required>
+        </div>
+        <div class="campo">
+          <label for="registro-password">Contraseña</label>
+          <input type="password" id="registro-password" required minlength="6">
+        </div>
+        <div class="campo">
+          <label for="registro-password2">Repetir contraseña</label>
+          <input type="password" id="registro-password2" required minlength="6">
+        </div>
+        <p class="auth-error" id="error-registro"></p>
+        <button type="submit" class="boton boton-primario">Crear cuenta</button>
+      </form>
+      <p class="auth-cambio">¿Ya tenés cuenta? <a href="#" id="mostrar-login">Ingresá acá</a></p>
+    </div>
+  </div>
+</div>
+<div class="fondo-oscurecido"></div>
+
+<script type="module" src="js/firebase-init.js"></script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/cart.js"></script>
+<script type="module" src="js/catalog.js"></script>
+<script>document.getElementById("anio").textContent = new Date().getFullYear();</script>
+</body>
+</html>
