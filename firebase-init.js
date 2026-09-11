@@ -2,6 +2,7 @@
 // los demás archivos (auth.js, catalog.js, admin.js, cart.js).
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,6 +10,7 @@ import {
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
 import {
   initializeFirestore,
   collection,
@@ -28,6 +30,7 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+
 export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true
 });
