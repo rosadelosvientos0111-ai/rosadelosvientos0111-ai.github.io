@@ -153,7 +153,6 @@ function resetForm() {
   tituloForm.textContent = "Agregar producto nuevo";
   btnCancelarEdicion.classList.add("oculto");
 }
-
 async function borrarProducto(id) {
   if (!confirm("¿Seguro que querés borrar este producto? No se puede deshacer.")) return;
   await deleteDoc(doc(db, "productos", id));
