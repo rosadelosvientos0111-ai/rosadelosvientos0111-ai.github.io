@@ -1,5 +1,4 @@
-// Inicializa Firebase una sola vez y exporta lo que necesitan
-// los demás archivos (auth.js, catalog.js, admin.js, cart.js).
+// firebase-init.js
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 
@@ -18,12 +17,10 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  onSnapshot,
   getDocs,
-  getDocsFromServer,
   query,
   orderBy
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-lite.js";
 
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -38,14 +35,13 @@ export {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+
   collection,
   addDoc,
   updateDoc,
   deleteDoc,
   doc,
-  onSnapshot,
   getDocs,
-  getDocsFromServer,
   query,
   orderBy
 };
