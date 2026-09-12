@@ -90,29 +90,160 @@ inputArchivoImagen?.addEventListener("change", async () => {
     if (btnGuardarProducto) btnGuardarProducto.disabled = false;
   }
 });
+async function cargarProductos() {
+  try {
+    console.log("🔄 Cargando productos del servidor...");
 
-const q = query(collection(db, "productos"), orderBy("nombre"));
-
-getDocsFromServer(q)
-  .then((snapshot) => {
-    console.log("🧪 LECTURA DIRECTA DEL SERVIDOR:", snapshot.docs.length);
-    console.log(
-      "🧪 DATOS DEL SERVIDOR:",
-      snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data()
-      }))
+    const q = query(
+      collection(db, "productos"),
+      orderBy("nombre")
     );
-  })
-  .catch((error) => {
-    console.error("🔴 ERROR LECTURA DIRECTA DEL SERVIDOR");
-    console.error("📌 CÓDIGO:", error.code);
-    console.error("📌 NOMBRE:", error.name);
-    console.error("📌 MENSAJE:", error.message);
-    console.error("📌 ERROR COMPLETO:", error);
-  });
 
-onSnapshot(
+    const snapshot = await getDocs(q);
+
+    console.log(
+      "🟢 PRODUCTOS LEÍDOS DEL SERVIDOR:",
+      snapshot.docs.length
+    );
+
+    const productos = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data()
+    }));
+
+    console.log("📦 PRODUCTOS:", productos);
+
+    tabla.innerHTML = productos
+      .map(
+        (p) => `
+        <tr>
+
+          <td>
+            <img
+              src="${
+                p.imagenUrl ||
+                "https://placehold.co/60x60/e8f5e0/2f6b4f?text=%20"
+              }"
+              alt=""
+              class="miniatura"
+            >
+          </td>
+
+          <td>${p.nombre}</td>
+
+          <td>
+            ${p.categoria}
+            ${p.subcategoria ? " · " + p.subcategoria : ""}
+          </td>
+
+          <td>
+            $${Number(p.precio).toLocaleString("es-AR")}
+          </td>
+
+          <td>
+
+            <select
+              class="selector-stock"
+              data-id="${p.id}"
+            >
+
+              <option
+                value="disponible"
+                ${p.disponible !== false ? "selected" : ""}
+              >
+                🟢 En stock
+              </option>
+
+              <option
+                value="sin-stock"
+                ${p.disponible === false ? "selected" : ""}
+              >
+                🟠 Sin stock
+              </option>
+
+            </select>
+
+          </td>
+
+          <td>
+            ${p.oferta ? "Sí" : "No"}
+          </td>
+
+          <td class="acciones-tabla">
+
+            <button
+              data-accion="guardar"
+              data-id="${p.id}"
+            >
+              💾 Guardar
+            </button>
+
+            <button
+              data-accion="editar"
+              data-id="${p.id}"
+            >
+              Editar
+            </button>
+
+            <button
+              data-accion="borrar"
+              data-id="${p.id}"
+              class="boton-borrar"
+            >
+              🗑️ Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+      `
+      )
+      .join("");
+
+    tabla
+      .querySelectorAll("button[data-accion]")
+      .forEach((btn) => {
+
+        btn.addEventListener("click", () => {
+
+          const producto = productos.find(
+            (p) => p.id === btn.dataset.id
+          );
+
+          if (!producto) return;
+
+          if (btn.dataset.accion === "guardar") {
+            guardarEstadoProducto(producto.id);
+          }
+
+          if (btn.dataset.accion === "editar") {
+            cargarParaEditar(producto);
+          }
+
+          if (btn.dataset.accion === "borrar") {
+            borrarProducto(producto.id);
+          }
+
+        });
+
+      });
+
+  } catch (error) {
+
+    console.error("🔴 ERROR AL LEER PRODUCTOS:", error);
+
+    tabla.innerHTML = `
+      <tr>
+        <td colspan="7">
+          No se pudieron cargar los productos.
+        </td>
+      </tr>
+    `;
+
+  }
+}
+
+cargarProductos();
   q,
   { includeMetadataChanges: true },
   (snapshot) => {
@@ -172,6 +303,7 @@ onSnapshot(
 );
 
 async function guardarEstadoProducto(id) {
+
   const selector = document.querySelector(
     `.selector-stock[data-id="${id}"]`
   );
@@ -179,12 +311,24 @@ async function guardarEstadoProducto(id) {
   const disponible = selector.value === "disponible";
 
   try {
-    await updateDoc(doc(db, "productos", id), {
-      disponible
-    });
+
+    await updateDoc(
+      doc(db, "productos", id),
+      { disponible }
+    );
+
+    console.log("✅ Estado actualizado");
+
+    await cargarProductos();
+
   } catch (error) {
+
     console.error(error);
-    alert("No se pudo guardar el estado del producto.");
+
+    alert(
+      "No se pudo guardar el estado del producto."
+    );
+
   }
 }
 
@@ -217,8 +361,37 @@ function resetForm() {
 }
 
 async function borrarProducto(id) {
-  if (!confirm("¿Seguro que querés borrar este producto? No se puede deshacer.")) return;
-  await deleteDoc(doc(db, "productos", id));
+
+  if (
+    !confirm(
+      "¿Seguro que querés borrar este producto? No se puede deshacer."
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await deleteDoc(
+      doc(db, "productos", id)
+    );
+
+    console.log("🗑️ Producto eliminado");
+
+    await cargarProductos();
+
+  } catch (error) {
+
+    console.error(
+      "🔴 ERROR AL ELIMINAR:",
+      error
+    );
+
+    alert(
+      "No se pudo eliminar el producto."
+    );
+
+  }
 }
 
 form?.addEventListener("submit", async (e) => {
@@ -253,6 +426,18 @@ form?.addEventListener("submit", async (e) => {
 
      console.log("✅ PRODUCTO GUARDADO EN FIRESTORE");
      console.log("🆔 ID del producto:", docRef.id);
+     await cargarProductos();
+     await updateDoc(
+     doc(db, "productos", editandoId),
+     datos
+   );
+
+   console.log(
+     "✅ Producto actualizado:",
+    editandoId
+    );
+
+     await cargarProductos();
      console.log("📦 Datos:", datos);
 
   mensajeEstado.textContent = "Producto agregado ✓";
