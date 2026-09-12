@@ -7,10 +7,10 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  onSnapshot,
-  getDocsFromServer,
+  getDocs,
   query,
   orderBy
+} from "./firebase-init.js";
 } from "./firebase-init.js";
 import { ADMIN_EMAIL } from "./firebase-config.js";
 
