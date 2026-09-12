@@ -1,4 +1,3 @@
-```javascript
 import {
   db,
   collection,
@@ -57,9 +56,10 @@ async function cargarProductos() {
 
 filtros.forEach((btn) => {
   btn.addEventListener("click", () => {
-    filtros.forEach((b) =>
-      b.classList.remove("activo")
-    );
+
+    filtros.forEach((b) => {
+      b.classList.remove("activo");
+    });
 
     btn.classList.add("activo");
 
@@ -70,6 +70,7 @@ filtros.forEach((btn) => {
 });
 
 function render() {
+
   const lista =
     categoriaActiva === "Todas"
       ? productos
@@ -78,6 +79,7 @@ function render() {
         );
 
   if (lista.length === 0) {
+
     grilla.innerHTML = "";
 
     mensajeVacio.classList.remove("oculto");
@@ -88,71 +90,96 @@ function render() {
   mensajeVacio.classList.add("oculto");
 
   grilla.innerHTML = lista
-    .map(
-      (p) => `
+    .map((p) => {
+
+      const imagen =
+        p.imagenUrl ||
+        "https://placehold.co/400x400/e8f5e0/2f6b4f?text=Sin+foto";
+
+      const etiquetaOferta =
+        p.oferta
+          ? '<span class="etiqueta-oferta">Oferta</span>'
+          : "";
+
+      const subcategoria =
+        p.subcategoria
+          ? " · " + p.subcategoria
+          : "";
+
+      const precio =
+        Number(p.precio).toLocaleString("es-AR");
+
+      let estadoStock = "";
+      let boton = "";
+
+      if (p.disponible !== false) {
+
+        estadoStock = `
+          <p class="estado-stock disponible">
+            🟢 En stock
+          </p>
+        `;
+
+        boton = `
+          <button
+            class="boton-agregar"
+            data-id="${p.id}"
+          >
+            Agregar al pedido
+          </button>
+        `;
+
+      } else {
+
+        estadoStock = `
+          <p class="estado-stock sin-stock">
+            🟠 Sin stock
+          </p>
+        `;
+
+        boton = `
+          <button
+            class="boton-agregar"
+            disabled
+          >
+            Sin stock
+          </button>
+        `;
+      }
+
+      return `
         <article class="tarjeta-producto">
 
           <div class="marco-imagen">
 
             <img
-              src="${
-                p.imagenUrl ||
-                "https://placehold.co/400x400/e8f5e0/2f6b4f?text=Sin+foto"
-              }"
+              src="${imagen}"
               alt="${p.nombre}"
               loading="lazy"
             >
 
-            ${
-              p.oferta
-                ? '<span class="etiqueta-oferta">Oferta</span>'
-                : ""
-            }
+            ${etiquetaOferta}
 
           </div>
 
           <h3>${p.nombre}</h3>
 
           <p class="categoria-chip">
-            ${p.categoria}
-            ${p.subcategoria ? " · " + p.subcategoria : ""}
+            ${p.categoria}${subcategoria}
           </p>
 
           <p class="precio">
-            $${Number(p.precio).toLocaleString("es-AR")}
+            $${precio}
           </p>
 
-          ${
-            p.disponible !== false
-              ? `
-                <p class="estado-stock disponible">
-                  🟢 En stock
-                </p>
+          ${estadoStock}
 
-                <button
-                  class="boton-agregar"
-                  data-id="${p.id}"
-                >
-                  Agregar al pedido
-                </button>
-              `
-              : `
-                <p class="estado-stock sin-stock">
-                  🟠 Sin stock
-                </p>
-
-                <button
-                  class="boton-agregar"
-                  disabled
-                >
-                  Sin stock
-                </button>
-              `
-          }
+          ${boton}
 
         </article>
-      `
-    )
+      `;
+
+    })
     .join("");
 
   grilla
@@ -175,4 +202,3 @@ function render() {
 }
 
 cargarProductos();
-```
