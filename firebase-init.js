@@ -12,7 +12,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 import {
-  initializeFirestore,
+  getFirestore,
   collection,
   addDoc,
   updateDoc,
@@ -31,9 +31,7 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 
-export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true
-});
+export const db = getFirestore(app);
 
 export {
   createUserWithEmailAndPassword,
