@@ -1,3 +1,4 @@
+```javascript
 import {
   db,
   collection,
@@ -31,13 +32,20 @@ async function cargarProductos() {
       ...d.data()
     }));
 
-    console.log("🟢 PRODUCTOS CARGADOS:", productos.length);
+    console.log(
+      "🟢 PRODUCTOS CARGADOS:",
+      productos.length
+    );
+
     console.log("📦 PRODUCTOS:", productos);
 
     render();
 
   } catch (error) {
-    console.error("🔴 ERROR CARGANDO PRODUCTOS:", error);
+    console.error(
+      "🔴 ERROR CARGANDO PRODUCTOS:",
+      error
+    );
 
     grilla.innerHTML = `
       <p class="error-catalogo">
@@ -49,7 +57,9 @@ async function cargarProductos() {
 
 filtros.forEach((btn) => {
   btn.addEventListener("click", () => {
-    filtros.forEach((b) => b.classList.remove("activo"));
+    filtros.forEach((b) =>
+      b.classList.remove("activo")
+    );
 
     btn.classList.add("activo");
 
@@ -164,5 +174,5 @@ function render() {
     });
 }
 
-// Cargar productos al abrir la página
 cargarProductos();
+```
